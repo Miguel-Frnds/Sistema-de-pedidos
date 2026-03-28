@@ -1,9 +1,7 @@
 package br.com.miguel.ordem_management.api.handler;
 
 import br.com.miguel.ordem_management.api.dto.error.RestErrorMessage;
-import br.com.miguel.ordem_management.domain.exception.EmailAlreadyExistsException;
-import br.com.miguel.ordem_management.domain.exception.UserNotFoundException;
-import br.com.miguel.ordem_management.domain.exception.UsernameAlreadyExistsException;
+import br.com.miguel.ordem_management.domain.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -25,6 +23,12 @@ public class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<RestErrorMessage> ProductNotFoundHandler(ProductNotFoundException exception){
+        RestErrorMessage error = new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage(), LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<RestErrorMessage> emailAlreadyExistsHandler(EmailAlreadyExistsException exception){
         RestErrorMessage error = new RestErrorMessage(HttpStatus.CONFLICT, exception.getMessage(), LocalDateTime.now());
@@ -35,6 +39,12 @@ public class RestExceptionHandler {
     public ResponseEntity<RestErrorMessage> usernameAlreadyExistsHandler(UsernameAlreadyExistsException exception){
         RestErrorMessage error = new RestErrorMessage(HttpStatus.CONFLICT, exception.getMessage(), LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<RestErrorMessage> insufficientStockHandler(InsufficientStockException exception){
+        RestErrorMessage error = new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage(), LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
