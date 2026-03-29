@@ -12,6 +12,7 @@ import br.com.miguel.ordem_management.domain.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -45,11 +46,13 @@ public class ProductService {
             foundProduct.setDescription(request.description());
         }
 
-        if(request.price() != null) {
-            foundProduct.setPrice(request.price());
-        }
-
         return ProductMapper.toResponseDTO(productRepository.save(foundProduct));
+    }
+
+    public void updatePrice(Long id, BigDecimal value){
+        Product foundProduct = getById(id);
+        foundProduct.setPrice(value);
+        productRepository.save(foundProduct);
     }
 
     public ProductResponseDTO addStock(Long id, ProductStockRequestDTO request){
@@ -74,7 +77,7 @@ public class ProductService {
         productRepository.delete(foundProduct);
     }
 
-    private Product getById(Long id){
+    public Product getById(Long id){
         return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
