@@ -1,9 +1,11 @@
 package br.com.miguel.ordem_management.api.controller;
 
+import br.com.miguel.ordem_management.api.dto.price.PriceRequestDTO;
 import br.com.miguel.ordem_management.api.dto.product.ProductCreateRequestDTO;
 import br.com.miguel.ordem_management.api.dto.product.ProductResponseDTO;
 import br.com.miguel.ordem_management.api.dto.product.ProductStockRequestDTO;
 import br.com.miguel.ordem_management.api.dto.product.ProductUpdateRequestDTO;
+import br.com.miguel.ordem_management.domain.service.PriceService;
 import br.com.miguel.ordem_management.domain.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private PriceService priceService;
+
     @GetMapping
     public ResponseEntity<List<ProductResponseDTO>> findAll(){
         List<ProductResponseDTO> products = productService.findAll();
@@ -35,6 +40,7 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ProductResponseDTO> save(@Valid @RequestBody ProductCreateRequestDTO requestDTO){
         ProductResponseDTO product = productService.save(requestDTO);
+        priceService.newPrice(new PriceRequestDTO(requestDTO.price()), product.id());
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
