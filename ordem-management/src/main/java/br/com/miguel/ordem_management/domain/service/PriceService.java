@@ -53,6 +53,16 @@ public class PriceService {
         return PriceMapper.toResponseDTO(savedPrice);
     }
 
+    public void registerInitialPrice(PriceRequestDTO priceDTO, Long productId){
+        Product product = productService.getById(productId);
+
+        Price price = new Price();
+        price.setValue(priceDTO.value());
+        price.setProduct(product);
+
+        priceRepository.save(price);
+    }
+
     private Price getByIdAndProductId(Long id, Long productId){
         return priceRepository.findByIdAndProductId(id, productId)
                 .orElseThrow(() -> new PriceNotFoundException(id, productId));
