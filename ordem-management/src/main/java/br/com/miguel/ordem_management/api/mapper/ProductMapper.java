@@ -20,7 +20,8 @@ public class ProductMapper {
                 product.getName(),
                 product.getDescription(),
                 product.getPrice(),
-                product.getQuantity()
+                product.getQuantity(),
+                product.isActive()
         );
     }
 }
