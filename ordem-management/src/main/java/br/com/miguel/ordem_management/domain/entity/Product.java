@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,4 +31,10 @@ public class Product extends BaseEntity{
 
     @Column(nullable = false)
     private Integer quantity;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Price> prices = new ArrayList<>();
+
+    @Column(nullable = false)
+    private boolean active = true;
 }
