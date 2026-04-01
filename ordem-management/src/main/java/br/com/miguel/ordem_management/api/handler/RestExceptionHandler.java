@@ -35,6 +35,12 @@ public class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<RestErrorMessage> orderNotFoundHandler(OrderNotFoundException exception){
+        RestErrorMessage error = new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage(), LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<RestErrorMessage> emailAlreadyExistsHandler(EmailAlreadyExistsException exception){
         RestErrorMessage error = new RestErrorMessage(HttpStatus.CONFLICT, exception.getMessage(), LocalDateTime.now());
@@ -47,16 +53,40 @@ public class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
+    @ExceptionHandler(ProductAlreadyActiveException.class)
+    public ResponseEntity<RestErrorMessage> productAlreadyActiveHandler(ProductAlreadyActiveException exception){
+        RestErrorMessage error = new RestErrorMessage(HttpStatus.CONFLICT, exception.getMessage(), LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
     @ExceptionHandler(InsufficientStockException.class)
     public ResponseEntity<RestErrorMessage> insufficientStockHandler(InsufficientStockException exception){
-        RestErrorMessage error = new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage(), LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        RestErrorMessage error = new RestErrorMessage(HttpStatus.CONFLICT, exception.getMessage(), LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
     @ExceptionHandler(SamePriceException.class)
-    public ResponseEntity<RestErrorMessage> SamePriceHandler(SamePriceException exception){
-        RestErrorMessage error = new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage(), LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    public ResponseEntity<RestErrorMessage> samePriceHandler(SamePriceException exception){
+        RestErrorMessage error = new RestErrorMessage(HttpStatus.CONFLICT, exception.getMessage(), LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(OrderSameStatusException.class)
+    public ResponseEntity<RestErrorMessage> orderSameStatusHandler(OrderSameStatusException exception){
+        RestErrorMessage error = new RestErrorMessage(HttpStatus.CONFLICT, exception.getMessage(), LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(InvalidOrderStatusTransitionException.class)
+    public ResponseEntity<RestErrorMessage> invalidOrderStatusTransitionHandler(InvalidOrderStatusTransitionException exception){
+        RestErrorMessage error = new RestErrorMessage(HttpStatus.CONFLICT, exception.getMessage(), LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(ProductInactiveException.class)
+    public ResponseEntity<RestErrorMessage> productInactiveHandler(ProductInactiveException exception){
+        RestErrorMessage error = new RestErrorMessage(HttpStatus.UNPROCESSABLE_CONTENT, exception.getMessage(), LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(error);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -72,7 +102,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<RestErrorMessage> runtimeErrorHandler(RuntimeException exception){
-        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage(), LocalDateTime.now());
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected internal error", LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(threatResponse);
     }
 }
