@@ -40,7 +40,7 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ProductResponseDTO> save(@Valid @RequestBody ProductCreateRequestDTO requestDTO){
         ProductResponseDTO product = productService.save(requestDTO);
-        priceService.newPrice(new PriceRequestDTO(requestDTO.price()), product.id());
+        priceService.registerInitialPrice(new PriceRequestDTO(requestDTO.price()), product.id());
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
@@ -60,6 +60,18 @@ public class ProductController {
     public ResponseEntity<ProductResponseDTO> removeStock(@PathVariable Long id, @Valid @RequestBody ProductStockRequestDTO requestDTO){
         ProductResponseDTO product = productService.removeStock(id, requestDTO);
         return ResponseEntity.ok().body(product);
+    }
+
+    @PatchMapping("/{id}/activate")
+    public ResponseEntity<Void> activate(@PathVariable Long id){
+        productService.activate(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/deactivate")
+    public ResponseEntity<Void> deactivate(@PathVariable Long id){
+        productService.deactivate(id);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
