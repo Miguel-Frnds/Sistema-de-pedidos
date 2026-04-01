@@ -87,7 +87,7 @@ public class UserService {
         userRepository.delete(foundUser);
     }
 
-    private User getById(Long id){
+    public User getById(Long id){
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
