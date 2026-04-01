@@ -1,7 +1,7 @@
 package br.com.miguel.ordem_management.domain.entity;
 
 public enum OrderStatus {
-    CREATE,
+    CREATED,
     PROCESSING,
     FINISHED,
     CANCELED
